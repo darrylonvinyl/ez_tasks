@@ -18,10 +18,26 @@ class Task:
     def __init__(self,name: str, task_started=False) -> None:
         """Constructor for Task object"""
         self.name = name
-        self.date_created = datetime.datetime.now()
+        # self.date_created = datetime.datetime.now()
         self.task_started = task_started
         self.task_completed = False
         self.task_number = None
+    
+    def __repr__(self) -> str:
+        return f"{self.name}"
+
+    def get_status(self):
+        if not self.task_completed:
+            if not self.task_started:
+                return "NOT STARTED"
+            return "IN PROGRESS"
+        return "TASK COMPLETE"
+
+    def start_task(self):
+        self.task_started = True
+
+    def complete_task(self):
+        self.task_completed = True
 
 class TaskList:
     """Class for task list object.
@@ -61,18 +77,19 @@ class TaskList:
         new_task.task_number = self.next_task_number
         self.last_task_number = new_task.task_number
         self.next_task_number += 1
-        self.task_dict[new_task.task_number] = new_task.name
+        self.task_dict[new_task.task_number] = new_task
         
     def list_tasks(self):
         """
         Prints out current tasks on the task list.
         """
-        tasks = self.task_dict[1:]
         print("-"*65)
-        print("|Task number{:<3}|Task description{:<15}|Task status{:<8}|")
+        print("|Task No.|Task description                   |Task status       |")
         print("-"*65)
-        for task in tasks:
-            print("|{:<3}|{:<15}|{:<8}|".format(task.task_number,task.name,task.date_created))
+        for x in self.task_dict:
+            task = self.task_dict[x]
+            print("|{:<8}|{:<35}|{:<18}|".format(task.task_number,task.name,task.get_status()))
+            print("-"*65)
         print("-"*65)
 
     #TODO: Edit task

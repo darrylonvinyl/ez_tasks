@@ -4,13 +4,25 @@ from ez_tasks import Task,TaskList
 class TestTask(unittest.TestCase):
 
     def setUp(self):
-        self.a = Task('darryl')
-        self.a.date_created = (2022,11,30)
-
+        # Task not started
+        self.a = Task("Wash the car")
+        # self.a.date_created = (2022,11,30)
+   
     def test_istask(self):
         self.assertIsInstance(self.a,Task)
-        self.assertEqual(self.a.name,'darryl')
+        self.assertEqual(self.a.name,'Wash the car')
         self.assertEqual(self.a.task_started, False)
+    
+    def test_getstatus(self):
+        self.b = Task("Clean the dishes")
+        self.c = Task("Take out the trash")
+        # Task in progress
+        self.b.start_task()
+        # Task completed
+        self.b.complete_task()
+        self.assertEqual(self.a.get_status(), "NOT STARTED")
+        self.assertEqual(self.b.get_status(), "TASK IN PROGRESS")
+        self.assertEqual(self.c.get_status(), "TASK COMPLETE")
 
     def tearDown(self):
         return super().tearDown()
@@ -29,8 +41,15 @@ class TestTaskList(unittest.TestCase):
         self.a.add_task("Replace air filter for HVAC")
         self.a.add_task("Clean my room")
         self.a.add_task("Wash the dishes")
-        self.assertEqual(self.a.task_dict[2],"Clean my room")
+        self.assertEqual(self.a.task_dict[2].name,"Clean my room")
         self.assertTrue(len(self.a) == 3)
+    
+    def test_list_task(self) -> None:
+        print("\n")
+        self.a.add_task("Replace air filter for HVAC")
+        self.a.add_task("Clean my room")
+        self.a.add_task("Wash the dishes")
+        self.a.list_tasks()
 
     def tearDown(self):
         return super().tearDown()
