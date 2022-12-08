@@ -10,7 +10,7 @@ class TestTask(unittest.TestCase):
    
     def test_istask(self):
         self.assertIsInstance(self.a,Task)
-        self.assertEqual(self.a.name,'Wash the car')
+        self.assertEqual(self.a.name,"Wash the car")
         self.assertEqual(self.a.task_started, False)
     
     def test_getstatus(self):
@@ -19,10 +19,15 @@ class TestTask(unittest.TestCase):
         # Task in progress
         self.b.start_task()
         # Task completed
-        self.b.complete_task()
+        self.c.complete_task()
         self.assertEqual(self.a.get_status(), "NOT STARTED")
-        self.assertEqual(self.b.get_status(), "TASK IN PROGRESS")
+        self.assertEqual(self.b.get_status(), "IN PROGRESS")
         self.assertEqual(self.c.get_status(), "TASK COMPLETE")
+    
+    def test_edittask(self):
+        self.assertEqual(self.a.name,"Wash the car")
+        self.a.edit_task("Wash the Prius")
+        self.assertEqual(self.a.name, "Wash the Prius")
 
     def tearDown(self):
         return super().tearDown()

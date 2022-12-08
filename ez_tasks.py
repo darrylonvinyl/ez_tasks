@@ -39,6 +39,9 @@ class Task:
     def complete_task(self):
         self.task_completed = True
 
+    def edit_task(self,new_task):
+        self.name = new_task
+
 class TaskList:
     """Class for task list object.
     
@@ -91,8 +94,6 @@ class TaskList:
             print("|{:<8}|{:<35}|{:<18}|".format(task.task_number,task.name,task.get_status()))
             print("-"*65)
         print("-"*65)
-
-    #TODO: Edit task
 
     #TODO: Delete task
 
