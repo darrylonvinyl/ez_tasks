@@ -6,7 +6,6 @@ class TestTask(unittest.TestCase):
     def setUp(self):
         # Task not started
         self.a = Task("Wash the car")
-        # self.a.date_created = (2022,11,30)
    
     def test_istask(self):
         self.assertIsInstance(self.a,Task)
@@ -16,9 +15,9 @@ class TestTask(unittest.TestCase):
     def test_getstatus(self):
         self.b = Task("Clean the dishes")
         self.c = Task("Take out the trash")
-        # Task in progress
+        # Task marked in progress
         self.b.start_task()
-        # Task completed
+        # Task marked completed
         self.c.complete_task()
         self.assertEqual(self.a.get_status(), "NOT STARTED")
         self.assertEqual(self.b.get_status(), "IN PROGRESS")
@@ -60,7 +59,6 @@ class TestTaskList(unittest.TestCase):
         self.a.add_task("Replace air filter for HVAC")
         self.a.add_task("Clean my room")
         self.a.add_task("Wash the dishes")
-        print(self.a)
         self.a.delete_task(2)
         self.assertTrue(len(self.a) == 2)
         self.a.list_tasks()

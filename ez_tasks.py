@@ -1,5 +1,4 @@
 """EZ Tasks - Simple task manager"""
-import datetime
 
 class Task:
     """Class for task object.
@@ -18,7 +17,6 @@ class Task:
     def __init__(self,name: str, task_started=False) -> None:
         """Constructor for Task object"""
         self.name = name
-        # self.date_created = datetime.datetime.now()
         self.task_started = task_started
         self.task_completed = False
         self.task_number = None
@@ -96,10 +94,34 @@ class TaskList:
             print("-"*65)
         print("-"*65)
 
-    #TODO: Delete task
     def delete_task(self,task_number):
         if self.task_dict[task_number]:
             self.unassigned_task_number.append(task_number)
             del self.task_dict[task_number]
 
 
+def display_menu():
+    print("Menu:")
+    print("1. See current tasks")
+    print("2. Create a task")
+    print("3. Edit a task")
+    print("4. Delete a task")
+    print("5. Quit")
+
+def handle_choice(choice):
+    if choice == '1':
+        # Perform action for option 1
+    elif choice == '2':
+        # Perform action for option 2
+    elif choice == '3':
+        # Perform action for option 3
+    elif choice == '4':
+        return False
+    return True
+
+while True:
+    display_menu()
+    choice = input("Enter your choice: ")
+
+    if not handle_choice(choice):
+        break
