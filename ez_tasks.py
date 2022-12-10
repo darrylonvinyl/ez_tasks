@@ -56,9 +56,10 @@ class TaskList:
     """
     def __init__(self,title) -> None:
         self.title = title
-        self.last_task_number = None
+        self.last_task_number = 0
         self.next_task_number = 1
         self.task_dict = {}
+        self.unassigned_task_number = []
 
     def __len__(self):
         return len(self.task_dict)
@@ -96,4 +97,9 @@ class TaskList:
         print("-"*65)
 
     #TODO: Delete task
+    def delete_task(self,task_number):
+        if self.task_dict[task_number]:
+            self.unassigned_task_number.append(task_number)
+            del self.task_dict[task_number]
+
 
