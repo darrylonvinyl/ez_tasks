@@ -55,6 +55,9 @@ class TestTaskList(unittest.TestCase):
         self.a.add_task("Wash the dishes")
         self.a.list_tasks()
 
+    def test_listtasknonecreated(self):
+        self.assertEqual(self.a.list_tasks(),"No tasks created yet!")
+
     def test_deletetask(self):
         self.a.add_task("Replace air filter for HVAC")
         self.a.add_task("Clean my room")
@@ -62,6 +65,10 @@ class TestTaskList(unittest.TestCase):
         self.a.delete_task(2)
         self.assertTrue(len(self.a) == 2)
         self.a.list_tasks()
+
+    def test_listtasknonecreated(self):
+        self.assertTrue(not self.a.task_dict)
+        self.assertEqual(self.a.list_tasks(), "No tasks created yet!")
 
     def tearDown(self):
         return super().tearDown()

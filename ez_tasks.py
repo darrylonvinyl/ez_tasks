@@ -1,5 +1,12 @@
 """EZ Tasks - Simple task manager"""
 
+import pickle
+import time
+from os.path import exists
+from os import system,name
+
+SAVE_FILE = "task_save.pkl"
+
 class Task:
     """Class for task object.
     
@@ -50,6 +57,10 @@ class TaskList:
             The last task number assigned.
         next_task_number : int
             The next task number to be assigned.
+        task_dict : dictionary
+            Structure to assign and track tasks on tasklist.
+        unassigned_task_number: list
+            Sturcture to hold freed task numbers for re-use.
         
     """
     def __init__(self,title) -> None:
@@ -88,7 +99,7 @@ class TaskList:
         print("-"*65)
         print("|Task No.|Task description                   |Task status       |")
         print("-"*65)
-        for x in self.task_dict:
+        for x in self.task_dict.keys():
             task = self.task_dict[x]
             print("|{:<8}|{:<35}|{:<18}|".format(task.task_number,task.name,task.get_status()))
             print("-"*65)
@@ -99,27 +110,89 @@ class TaskList:
             self.unassigned_task_number.append(task_number)
             del self.task_dict[task_number]
 
-
 def display_menu():
-    print("Menu:")
+    print("EZ Tasks Menu:")
     print("1. See current tasks")
     print("2. Create a task")
     print("3. Edit a task")
     print("4. Delete a task")
-    print("5. Quit")
+    print("5. Quit\n")
 
 def handle_choice(choice):
     if choice == '1':
-        # Perform action for option 1
+        if default_tasklist.task_dict:
+            default_tasklist.list_tasks()
+            time.sleep(4)
+            return True
+        else:
+            print("No tasks created yet!")
+            time.sleep(3)
+            return True
     elif choice == '2':
-        # Perform action for option 2
+        new_task = input("Please enter the task to track: \n")
+        default_tasklist.add_task(new_task)
+        print("New task created!")
+        time.sleep(3)
+        return True
     elif choice == '3':
-        # Perform action for option 3
+        if default_tasklist.task_dict:
+            default_tasklist.list_tasks()
+            task_choice = input("Please select the task you want to update: \n")
+            updated_task = input("Please enter updated task information: \n")
+            default_tasklist.task_dict[int(task_choice)].name = updated_task
+            print(f"Task {task_choice} has been updated.")
+            time.sleep(3)
+            return True
+        else:
+            print("No tasks created yet!")
+            time.sleep(3)
+            return True
     elif choice == '4':
+        if default_tasklist.task_dict:
+            default_tasklist.list_tasks()
+            print("\n")
+            task_to_delete = input("Please select the task you want to delete: \n")
+            default_tasklist.delete_task(int(task_to_delete))
+            print(f"Task {task_to_delete} has been deleted.")
+            time.sleep(2)
+            return True
+        else:
+            print("No tasks created yet!")
+            time.sleep(2)
+            return True
+    elif choice == '5':
+        save_object(default_tasklist)
         return False
-    return True
 
+def save_object(obj):
+    try:
+        with open(SAVE_FILE, "wb") as f:
+            pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
+    except Exception as ex:
+        print("Error during pickling object (Possibly unsupported):", ex)
+        time.sleep(3)
+        return True
+
+def load_object(filename):
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except Exception as ex:
+        print("Error during unpickling object (Possibly unsupported):", ex)
+        time.sleep(3)
+        return True
+
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
+
+default_tasklist = TaskList("TODO")
 while True:
+    clear()
     display_menu()
     choice = input("Enter your choice: ")
 
