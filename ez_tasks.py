@@ -114,27 +114,53 @@ def display_menu():
     print("EZ Tasks Menu:")
     print("1. See current tasks")
     print("2. Create a task")
-    print("3. Edit a task")
-    print("4. Delete a task")
-    print("5. Quit\n")
+    print("3. Mark task started")
+    print("4. Mark task completed")
+    print("5. Edit a task")
+    print("6. Delete a task")
+    print("7. Quit\n")
 
 def handle_choice(choice):
     if choice == '1':
         if default_tasklist.task_dict:
             default_tasklist.list_tasks()
-            time.sleep(4)
+            time.sleep(3)
             return True
         else:
             print("No tasks created yet!")
-            time.sleep(3)
+            time.sleep(2)
             return True
     elif choice == '2':
         new_task = input("Please enter the task to track: \n")
         default_tasklist.add_task(new_task)
         print("New task created!")
-        time.sleep(3)
+        time.sleep(2)
         return True
-    elif choice == '3':
+    elif choice =='3':
+        if default_tasklist.task_dict:
+            default_tasklist.list_tasks()
+            started_task = input("Which task do you want to mark started: \n")
+            default_tasklist.task_dict[int(started_task)].start_task()
+            print(f"Task {started_task} marked as in progress.")
+            time.sleep(3)
+            return True
+        else:
+            print("No tasks created yet!")
+            time.sleep(2)
+            return True
+    elif choice =='4':
+        if default_tasklist.task_dict:
+            default_tasklist.list_tasks()
+            completed_task = input("Which task do you want to mark completed: \n")
+            default_tasklist.task_dict[int(completed_task)].complete_task()
+            print(f"Task {completed_task} marked as completed.")
+            time.sleep(3)
+            return True
+        else:
+            print("No tasks created yet!")
+            time.sleep(2)
+            return True
+    elif choice == '5':
         if default_tasklist.task_dict:
             default_tasklist.list_tasks()
             task_choice = input("Please select the task you want to update: \n")
@@ -145,22 +171,22 @@ def handle_choice(choice):
             return True
         else:
             print("No tasks created yet!")
-            time.sleep(3)
+            time.sleep(2)
             return True
-    elif choice == '4':
+    elif choice == '6':
         if default_tasklist.task_dict:
             default_tasklist.list_tasks()
             print("\n")
             task_to_delete = input("Please select the task you want to delete: \n")
             default_tasklist.delete_task(int(task_to_delete))
             print(f"Task {task_to_delete} has been deleted.")
-            time.sleep(2)
+            time.sleep(3)
             return True
         else:
             print("No tasks created yet!")
             time.sleep(2)
             return True
-    elif choice == '5':
+    elif choice == '7':
         save_object(default_tasklist)
         return False
 
@@ -190,7 +216,10 @@ def clear():
     else:
         _ = system('clear')
 
-default_tasklist = TaskList("TODO")
+if not exists(SAVE_FILE):
+    default_tasklist = TaskList("TODO")
+else:
+    default_tasklist = load_object(SAVE_FILE)
 while True:
     clear()
     display_menu()
