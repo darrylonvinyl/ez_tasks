@@ -86,12 +86,15 @@ class TaskList:
             name : str
                 The task that you will be creating and need to track.
         """
-        #(TODO): Update add_task to use task numbers from unassigned_task_number.
         new_task = Task(name)
-        new_task.task_number = self.next_task_number
-        self.last_task_number = new_task.task_number
-        self.next_task_number += 1
-        self.task_dict[new_task.task_number] = new_task
+        if self.unassigned_task_number:
+            new_task.task_number = self.unassigned_task_number[0]
+            self.task_dict[new_task.task_number] = new_task
+        else:    
+            new_task.task_number = self.next_task_number
+            self.last_task_number = new_task.task_number
+            self.next_task_number += 1
+            self.task_dict[new_task.task_number] = new_task
         
     def list_tasks(self):
         """

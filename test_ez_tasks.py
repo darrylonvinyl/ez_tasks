@@ -21,7 +21,7 @@ class TestTask(unittest.TestCase):
         self.c.complete_task()
         self.assertEqual(self.a.get_status(), "NOT STARTED")
         self.assertEqual(self.b.get_status(), "IN PROGRESS")
-        self.assertEqual(self.c.get_status(), "TASK COMPLETE")
+        self.assertEqual(self.c.get_status(), "COMPLETE")
     
     def test_edittask(self):
         self.assertEqual(self.a.name,"Wash the car")
@@ -69,6 +69,16 @@ class TestTaskList(unittest.TestCase):
     def test_listtasknonecreated(self):
         self.assertTrue(not self.a.task_dict)
         self.assertEqual(self.a.list_tasks(), "No tasks created yet!")
+    
+    def test_unassignedtasknum(self):
+        self.a.add_task("Replace air filter for HVAC")
+        self.a.add_task("Clean my room")
+        self.a.add_task("Wash the dishes")
+        self.a.delete_task(2)
+        self.assertTrue(self.a.unassigned_task_number[0] == 2)
+        self.a.add_task("Change my tires")
+        self.assertEqual(self.a.task_dict[2].name, "Change my tires")
+        self.assertEqual(self.a.task_dict[2].task_number, 2)
 
     def tearDown(self):
         return super().tearDown()
