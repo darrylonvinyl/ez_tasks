@@ -86,6 +86,7 @@ class TaskList:
             name : str
                 The task that you will be creating and need to track.
         """
+        #(TODO): Update add_task to use task numbers from unassigned_task_number.
         new_task = Task(name)
         new_task.task_number = self.next_task_number
         self.last_task_number = new_task.task_number
@@ -99,6 +100,7 @@ class TaskList:
         if not self.task_dict:
             return "No tasks created yet!"
         else:
+        #(TODO): Update list_tasks to dynamically display tasks.
             print("-"*65)
             print("|Task No.|Task description                   |Task status       |")
             print("-"*65)
@@ -112,6 +114,8 @@ class TaskList:
         if self.task_dict[task_number]:
             self.unassigned_task_number.append(task_number)
             del self.task_dict[task_number]
+    
+    #(TODO): Clearing Tasks in 'COMPLETED' status from the TaskList.
 
 def display_menu():
     print("EZ Tasks Menu:")
@@ -221,6 +225,7 @@ def save_object(obj):
         print("Error during pickling object (Possibly unsupported):", ex)
         time.sleep(3)
         return True
+#(TODO): Update save_object to run when any operation on a task is completed.
 
 def load_object(filename):
     try:
