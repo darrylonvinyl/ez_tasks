@@ -36,7 +36,7 @@ class Task:
             if not self.task_started:
                 return "NOT STARTED"
             return "IN PROGRESS"
-        return "TASK COMPLETE"
+        return "COMPLETE"
 
     def start_task(self):
         self.task_started = True
@@ -74,7 +74,7 @@ class TaskList:
         return len(self.task_dict)
     
     def __repr__(self) -> str:
-        return f"{self.title} task list - ez_tasks"
+        return f"{self.title} task list"
     
     def add_task(self,name):
         """
@@ -96,14 +96,17 @@ class TaskList:
         """
         Prints out current tasks on the task list.
         """
-        print("-"*65)
-        print("|Task No.|Task description                   |Task status       |")
-        print("-"*65)
-        for x in self.task_dict.keys():
-            task = self.task_dict[x]
-            print("|{:<8}|{:<35}|{:<18}|".format(task.task_number,task.name,task.get_status()))
+        if not self.task_dict:
+            return "No tasks created yet!"
+        else:
             print("-"*65)
-        print("-"*65)
+            print("|Task No.|Task description                   |Task status       |")
+            print("-"*65)
+            for x in self.task_dict.keys():
+                task = self.task_dict[x]
+                print("|{:<8}|{:<35}|{:<18}|".format(task.task_number,task.name,task.get_status()))
+                print("-"*65)
+            print("-"*65)
 
     def delete_task(self,task_number):
         if self.task_dict[task_number]:
@@ -140,10 +143,15 @@ def handle_choice(choice):
         if default_tasklist.task_dict:
             default_tasklist.list_tasks()
             started_task = input("Which task do you want to mark started: \n")
-            default_tasklist.task_dict[int(started_task)].start_task()
-            print(f"Task {started_task} marked as in progress.")
-            time.sleep(3)
-            return True
+            if int(started_task) in  default_tasklist.task_dict:
+                default_tasklist.task_dict[int(started_task)].start_task()
+                print(f"Task {started_task} marked as in progress.")
+                time.sleep(3)
+                return True
+            else:
+                print("Please select a valid task.")
+                time.sleep(3)
+                return True
         else:
             print("No tasks created yet!")
             time.sleep(2)
@@ -152,10 +160,15 @@ def handle_choice(choice):
         if default_tasklist.task_dict:
             default_tasklist.list_tasks()
             completed_task = input("Which task do you want to mark completed: \n")
-            default_tasklist.task_dict[int(completed_task)].complete_task()
-            print(f"Task {completed_task} marked as completed.")
-            time.sleep(3)
-            return True
+            if int(completed_task) in default_tasklist.task_dict:
+                default_tasklist.task_dict[int(completed_task)].complete_task()
+                print(f"Task {completed_task} marked as completed.")
+                time.sleep(3)
+                return True
+            else:
+                print("Please select a valid task.")
+                time.sleep(3)
+                return True
         else:
             print("No tasks created yet!")
             time.sleep(2)
@@ -164,11 +177,16 @@ def handle_choice(choice):
         if default_tasklist.task_dict:
             default_tasklist.list_tasks()
             task_choice = input("Please select the task you want to update: \n")
-            updated_task = input("Please enter updated task information: \n")
-            default_tasklist.task_dict[int(task_choice)].name = updated_task
-            print(f"Task {task_choice} has been updated.")
-            time.sleep(3)
-            return True
+            if int(task_choice) in default_tasklist.task_dict:
+                updated_task = input("Please enter updated task information: \n")
+                default_tasklist.task_dict[int(task_choice)].name = updated_task
+                print(f"Task {task_choice} has been updated.")
+                time.sleep(3)
+                return True
+            else:
+                print("Please select a valid task.")
+                time.sleep(3)
+                return True
         else:
             print("No tasks created yet!")
             time.sleep(2)
@@ -178,10 +196,15 @@ def handle_choice(choice):
             default_tasklist.list_tasks()
             print("\n")
             task_to_delete = input("Please select the task you want to delete: \n")
-            default_tasklist.delete_task(int(task_to_delete))
-            print(f"Task {task_to_delete} has been deleted.")
-            time.sleep(3)
-            return True
+            if int(task_to_delete) in default_tasklist.task_dict:
+                default_tasklist.delete_task(int(task_to_delete))
+                print(f"Task {task_to_delete} has been deleted.")
+                time.sleep(3)
+                return True
+            else:
+                print("Please select a valid task.")
+                time.sleep(3)
+                return True
         else:
             print("No tasks created yet!")
             time.sleep(2)
@@ -216,14 +239,17 @@ def clear():
     else:
         _ = system('clear')
 
-if not exists(SAVE_FILE):
-    default_tasklist = TaskList("TODO")
-else:
-    default_tasklist = load_object(SAVE_FILE)
-while True:
-    clear()
-    display_menu()
-    choice = input("Enter your choice: ")
+if __name__ == "__main__":
 
-    if not handle_choice(choice):
-        break
+    if not exists(SAVE_FILE):
+        default_tasklist = TaskList("TODO")
+    else:
+        default_tasklist = load_object(SAVE_FILE)
+
+    while True:
+        clear()
+        display_menu()
+        choice = input("Enter your choice: ")
+
+        if not handle_choice(choice):
+            break
