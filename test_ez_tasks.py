@@ -1,5 +1,6 @@
 import unittest
-from ez_tasks import Task,TaskList
+import pickle
+from ez_tasks import Task,TaskList, save_object, load_object
 
 class TestTask(unittest.TestCase):
 
@@ -79,6 +80,15 @@ class TestTaskList(unittest.TestCase):
         self.a.add_task("Change my tires")
         self.assertEqual(self.a.task_dict[2].name, "Change my tires")
         self.assertEqual(self.a.task_dict[2].task_number, 2)
+
+    def test_saveandloadobject(self):
+        TEST_SAVE_FILE = "test_data.pkl"
+        self.a.add_task("Replace air filter for HVAC")
+        test_data = self.a.task_dict[1]
+        save_object(self.a, TEST_SAVE_FILE)
+        load_object(TEST_SAVE_FILE)
+        saved_data = self.a.task_dict[1]
+        self.assertEqual(test_data, saved_data)
 
     def tearDown(self):
         return super().tearDown()

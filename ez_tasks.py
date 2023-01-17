@@ -144,6 +144,7 @@ def handle_choice(choice):
         new_task = input("Please enter the task to track: \n")
         default_tasklist.add_task(new_task)
         print("New task created!")
+        save_object(default_tasklist)
         time.sleep(2)
         return True
     elif choice =='3':
@@ -153,6 +154,7 @@ def handle_choice(choice):
             if int(started_task) in  default_tasklist.task_dict:
                 default_tasklist.task_dict[int(started_task)].start_task()
                 print(f"Task {started_task} marked as in progress.")
+                save_object(default_tasklist)
                 time.sleep(3)
                 return True
             else:
@@ -170,6 +172,7 @@ def handle_choice(choice):
             if int(completed_task) in default_tasklist.task_dict:
                 default_tasklist.task_dict[int(completed_task)].complete_task()
                 print(f"Task {completed_task} marked as completed.")
+                save_object(default_tasklist)
                 time.sleep(3)
                 return True
             else:
@@ -188,6 +191,7 @@ def handle_choice(choice):
                 updated_task = input("Please enter updated task information: \n")
                 default_tasklist.task_dict[int(task_choice)].name = updated_task
                 print(f"Task {task_choice} has been updated.")
+                save_object(default_tasklist)
                 time.sleep(3)
                 return True
             else:
@@ -206,6 +210,7 @@ def handle_choice(choice):
             if int(task_to_delete) in default_tasklist.task_dict:
                 default_tasklist.delete_task(int(task_to_delete))
                 print(f"Task {task_to_delete} has been deleted.")
+                save_object(default_tasklist)
                 time.sleep(3)
                 return True
             else:
@@ -220,9 +225,9 @@ def handle_choice(choice):
         save_object(default_tasklist)
         return False
 
-def save_object(obj):
+def save_object(obj,save_file=SAVE_FILE):
     try:
-        with open(SAVE_FILE, "wb") as f:
+        with open(save_file, "wb") as f:
             pickle.dump(obj, f, protocol=pickle.HIGHEST_PROTOCOL)
     except Exception as ex:
         print("Error during pickling object (Possibly unsupported):", ex)
